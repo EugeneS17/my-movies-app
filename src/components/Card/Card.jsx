@@ -1,5 +1,6 @@
 import { Card, Flex, Tag, Typography } from 'antd'
 import './Card.css'
+import { formatDate, sliceText } from '../../services/utils'
 
 const { Title, Text, Paragraph } = Typography
 
@@ -13,21 +14,16 @@ export default function MovieCard({ card }) {
       }}
     >
       <Flex justify="space-between" className="card__body">
-        <img
-          alt="poster"
-          src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-          className="card__image"
-        />
+        <img alt="poster" src={card.posterImageUrl} className="card__image" />
         <Flex vertical justify="flex-start" align="flex-start" gap={7} className="card__content">
           <Title level={2} className="card__title">
             {card.title}
           </Title>
-          <Text type="secondary">{card.release_date}</Text>
+          <Text type="secondary">{formatDate(card.releaseDate)}</Text>
           <Flex wrap gap="8px 0" className="card__tags">
-            <Tag>Action</Tag>
-            <Tag>Action</Tag>
+            {card.genres && card.genres.map((genre) => <Tag key={genre.id}>{genre.name}</Tag>)}
           </Flex>
-          <Paragraph className="card__description">{card.overview}</Paragraph>
+          <Paragraph className="card__description">{sliceText(card.description)}</Paragraph>
         </Flex>
       </Flex>
     </Card>

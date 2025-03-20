@@ -40,8 +40,18 @@ module.exports = {
         groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
       },
     ],
-    'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'consistent-return': 'off',
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: [
+          'vite.config.js',
+          '**/*.test.js',
+          '**/*.spec.js',
+        ],
+      },
+    ],
   },
   settings: {
     react: { version: '18.2' },
@@ -52,4 +62,4 @@ module.exports = {
       },
     },
   },
-}
+};

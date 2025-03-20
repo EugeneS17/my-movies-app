@@ -9,6 +9,7 @@
   padding: 0;
   overflow: hidden;
   height: 100%;
+  border-radius: 0;
 }
 
 .card__image {
@@ -19,10 +20,15 @@
 
 .card__content {
   padding: 12px 20px 0;
+  flex-grow: 1;
 }
 
 .card__content :not(.card__title) {
-  font-size: 12px;
+  /* font-size: 12px; */
+}
+
+.card .card__tags > * {
+  font-size: inherit;
 }
 
 .card .card__title {
