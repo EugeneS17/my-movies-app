@@ -1,7 +1,7 @@
 .card {
   padding: 0;
   border-radius: 0;
-  flex-basis: calc(50% - 10px);
+  flex-basis: calc(50% - 15px);
   min-height: 280px;
 }
 

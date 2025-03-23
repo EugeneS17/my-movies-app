@@ -10,7 +10,7 @@
     max-width: 1010px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 30px;
     align-items: center;
     min-height: 100vh;
     padding: 30px;

@@ -11,9 +11,10 @@ export default function useFetching(callback) {
     } catch (e) {
       setError(e.message)
     } finally {
-      setIsLoading(false)
+      setTimeout(() => setIsLoading(false), 1000)
+      // setIsLoading(false)
     }
   }
 
-  return [fetching, isLoading, error]
+  return [fetching, isLoading, setIsLoading, error]
 }
