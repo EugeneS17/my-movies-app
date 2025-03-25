@@ -15,7 +15,14 @@ export default function MovieCard({ card }) {
       }}
     >
       <Flex justify="space-between" className="card__body">
-        <img alt="poster" src={card.posterImageUrl || defaultPoster} className="card__image" />
+        <img
+          alt="poster"
+          src={card.posterImageUrl || defaultPoster}
+          onError={(e) => {
+            e.currentTarget.src = defaultPoster
+          }}
+          className="card__image"
+        />
         <Flex vertical justify="flex-start" align="flex-start" gap={7} className="card__content">
           <Title level={2} className="card__title">
             {card.title}

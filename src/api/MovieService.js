@@ -37,7 +37,7 @@ export default class MovieService {
 
       return this.convertMoviesData(data)
     } catch (e) {
-      throw new Error(`[${e.response.status}] Failed to fetch movies. Try again later.`)
+      throw new Error(`[${e.response?.status || 'XXX'}] Failed to fetch movies. Try again later.`)
     }
   }
 
