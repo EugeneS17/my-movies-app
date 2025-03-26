@@ -1,74 +1,61 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { debounce } from 'lodash'
-import { Alert, Spin } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
+import { Tabs } from 'antd'
 import './App.css'
-import CardsList from './components/CardsList/CardsList'
 import MovieService from './api/MovieService'
-import Search from './components/Search/Search'
-import Pagination from './components/Pagination/Pagination'
-
-const api = new MovieService()
+import MovieServiceContext from './context/MovieServiceContext'
+import SearchTab from './components/SearchTab/SearchTab'
+import RatedTab from './components/RatedTab/RatedTab'
 
 function App() {
-  const [cards, setCards] = useState([])
-  const [totalCards, setTotalCards] = useState(null)
-  const [query, setQuery] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [page, setPage] = useState(1)
+  const api = useMemo(() => new MovieService(), [])
+  const [sessionId, setSessionId] = useState(null)
+  const [genres, setGenres] = useState([])
+  const [, setFetchError] = useState(null)
 
-  const [isCardsLoading, setIsCardsLoading] = useState(false)
-  const [cardsError, setCardsError] = useState(null)
-
-  const debouncedFetchCards = useMemo(
-    () =>
-      debounce(async () => {
-        try {
-          setCardsError(null)
-          const { results, totalResults } = await api.searchMovies(searchQuery, page)
-          setCards(results)
-          setTotalCards(totalResults)
-        } catch (e) {
-          setCardsError(e.message)
-        } finally {
-          setIsCardsLoading(false)
-        }
-      }, 500),
-    [searchQuery, page]
-  )
-
-  const fetchSearchResults = useCallback(() => {
-    if (!searchQuery) {
-      return
+  useEffect(() => {
+    async function fetchGenres() {
+      try {
+        const data = await api.getMovieGenres()
+        setGenres(data)
+      } catch (e) {
+        setFetchError(e.message)
+      }
     }
-    setIsCardsLoading(true)
-    debouncedFetchCards()
-    return () => {
-      debouncedFetchCards.cancel()
-      setCards([])
-      setIsCardsLoading(false)
+
+    async function getSessionId() {
+      try {
+        const id = await api.createGuestSession()
+        setSessionId(id)
+      } catch (e) {
+        setFetchError(e.message)
+      }
     }
-  }, [searchQuery, debouncedFetchCards])
 
-  useEffect(fetchSearchResults, [fetchSearchResults])
+    fetchGenres()
+    getSessionId()
+  }, [api])
 
-  function handleSearch(value) {
-    setQuery(value)
-    setSearchQuery(value.trim())
-    setPage(1)
-  }
+  const tabs = [
+    {
+      key: '1',
+      label: 'Search',
+      children: <SearchTab />,
+    },
+    {
+      key: '2',
+      label: 'Rated',
+      children: <RatedTab />,
+      destroyInactiveTabPane: true,
+    },
+  ]
+
+  const context = useMemo(() => ({ api, genres, sessionId }), [api, genres, sessionId])
 
   return (
     <div className="container">
-      <Search query={query} onSearch={(v) => handleSearch(v)} />
-      {!searchQuery && !isCardsLoading && <Alert message="Type to search..." type="info" showIcon />}
-      {isCardsLoading && <Spin size="large" />}
-      {/* {console.log(cards)} */}
-      {searchQuery && !isCardsLoading ? (
-        <>
-          <CardsList cards={cards} totalCards={totalCards} error={cardsError} />
-          <Pagination page={page} totalResults={totalCards} onPageChange={setPage} />
-        </>
-      ) : null}
+      <MovieServiceContext.Provider value={context}>
+        <Tabs defaultActiveKey="1" items={tabs} className="tabs" tabBarStyle={{ marginInline: 'auto' }} />
+      </MovieServiceContext.Provider>
     </div>
   )
 }

@@ -1,5 +1,6 @@
-import { Alert, Flex } from 'antd'
+import { Alert } from 'antd'
 import Card from '../Card/Card'
+import './CardsList.css'
 
 export default function CardsList({ cards, totalCards, error }) {
   if (error) {
@@ -9,10 +10,10 @@ export default function CardsList({ cards, totalCards, error }) {
   return !totalCards ? (
     <Alert message="No movies found" type="info" showIcon />
   ) : (
-    <Flex wrap gap={30}>
+    <div className="cards">
       {cards.map((result) => (
         <Card key={result.id} card={result} />
       ))}
-    </Flex>
+    </div>
   )
 }

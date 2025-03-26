@@ -19,16 +19,22 @@
 }
 
 .card__content {
-  padding: 12px 20px 0;
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
-}
-
-.card__content :not(.card__title) {
-  /* font-size: 12px; */
+  gap: 7px;
 }
 
 .card .card__tags > * {
   font-size: inherit;
+}
+
+.card .card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-self: stretch;
+  padding: 12px 10px 0 20px;
 }
 
 .card .card__title {
@@ -38,6 +44,26 @@
   margin: 0;
 }
 
+.card .card__info {
+  padding: 0 20px 12px;
+  flex-grow: 1;
+  padding: 0 20px 20px;
+}
+
 .card .card__description {
   margin: 0;
+}
+
+.card .card__rate {
+  margin-top: auto;
+}
+
+@media screen and (max-width: 1140px) {
+  .card {
+  }
+}
+
+@media screen and (max-width: 590px) {
+  .card {
+  }
 }
