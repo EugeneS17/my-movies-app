@@ -7,6 +7,7 @@ export default function useFetching(callback) {
   async function fetching() {
     try {
       setIsLoading(true)
+      setError(null)
       await callback()
     } catch (e) {
       setError(e.message)
