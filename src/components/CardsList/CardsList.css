@@ -1,0 +1,17 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  width: 100%;
+}
+
+.alert {
+  text-align: center;
+  white-space: break-spaces;
+}
+
+@media screen and (max-width: 1140px) {
+  .cards {
+    flex-direction: column;
+  }
+}

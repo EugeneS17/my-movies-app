@@ -5,7 +5,7 @@ function formatDate(date) {
   return format(new Date(date), 'MMMM dd, yyyy')
 }
 
-function sliceText(text, length = 210) {
+function sliceText(text, length = 175) {
   if (!text) return
   if (text.length > length) {
     const regex = new RegExp(`^.{1,${length}}\\b(?<!\\-)`)
