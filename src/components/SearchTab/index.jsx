@@ -29,7 +29,8 @@ export default function SearchTab() {
       debounce(async () => {
         try {
           setFetchError(null)
-          const { results, totalResults } = await api.searchMovies(searchQuery, page)
+          const queryToSearch = searchQuery || 'return'
+          const { results, totalResults } = await api.searchMovies(queryToSearch, page)
           setCards(results)
           setTotalCards(totalResults)
         } catch (e) {
@@ -42,9 +43,6 @@ export default function SearchTab() {
   )
 
   const fetchSearchResults = useCallback(() => {
-    if (!searchQuery) {
-      return
-    }
     setIsCardsLoading(true)
     debouncedFetchCards()
     return () => {
@@ -52,21 +50,21 @@ export default function SearchTab() {
       setCards([])
       setIsCardsLoading(false)
     }
-  }, [searchQuery, debouncedFetchCards])
+  }, [debouncedFetchCards])
 
   useEffect(fetchSearchResults, [fetchSearchResults])
 
   return (
     <div className="search-tab">
       <Search query={query} onSearch={(v) => handleSearch(v)} />
-      {!searchQuery && !isCardsLoading && <Alert message="Type to search..." type="info" showIcon />}
+      {!query && !isCardsLoading && <Alert message="Type to search..." type="info" showIcon />}
       {isCardsLoading && <Spin size="large" />}
-      {searchQuery && !isCardsLoading ? (
+      {!isCardsLoading && (
         <>
           <CardsList cards={cards} totalCards={totalCards} error={fetchError} />
-          {!fetchError && <Pagination page={page} totalResults={totalCards} onPageChange={setPage} />}
+          {!fetchError && totalCards > 0 && <Pagination page={page} totalResults={totalCards} onPageChange={setPage} />}
         </>
-      ) : null}
+      )}
     </div>
   )
 }
